@@ -115,46 +115,67 @@ def generate_image(defn: ImageDefinition = Body(...)):
     else:
         lines = defn.text.split("\n")
 
-    # Calculate total text box dimensions
+    # First phase: Measure all lines and calculate text box dimensions
+    line_info = []
     max_width = 0
     total_height = 0
-    line_dimensions = []
     
     for line in lines:
-        bbox = draw.textbbox((0, 0), line, font=font)
-        width = bbox[2] - bbox[0]
-        height = bbox[3] - bbox[1]
+        # Get exact text dimensions using bounding box
+        left, top, right, bottom = draw.textbbox((0, 0), line, font=font)
+        width = right - left
+        height = bottom - top
+        
+        # Store line information
+        line_info.append({
+            'text': line,
+            'width': width,
+            'height': height,
+            'left_offset': -left  # Adjustment needed for proper alignment
+        })
+        
         max_width = max(max_width, width)
         total_height += height + defn.line_spacing
-        line_dimensions.append((width, height))
     
-    total_height -= defn.line_spacing  # Remove extra spacing after last line
+    # Remove extra spacing after last line
+    total_height -= defn.line_spacing
     
-    # Calculate starting position to center the entire text box
-    start_x = (defn.width - max_width) // 2
-    start_y = (defn.height - total_height) // 2
-    y = start_y
+    # Calculate text box position (centered in image)
+    box_left = (defn.width - max_width) // 2
+    box_top = (defn.height - total_height) // 2
+    current_y = box_top
 
-    # Draw each line
-    # Calculate x position based on alignment only
-    for i, line in enumerate(lines):
-        width, height = line_dimensions[i]
-        
-        # Handle alignment independently of direction
+    # Second phase: Draw lines with proper alignment
+    for info in line_info:
+        # Calculate x position based on alignment
         if defn.text_align == "left":
-            x = start_x
+            x = box_left
         elif defn.text_align == "right":
-            x = start_x + (max_width - width)
+            x = box_left + (max_width - info['width'])
         else:  # center
-            x = start_x + (max_width - width) // 2
+            x = box_left + (max_width - info['width']) // 2
         
-        # Only reverse the individual line if it contains RTL text and direction is RTL
-        display_line = line
+        # Adjust x position by left_offset for proper alignment
+        x += info['left_offset']
+        
+        # Draw shadow if enabled
         if defn.text_shadow:
-            draw.text((x + defn.shadow_offset[0], y + defn.shadow_offset[1]), 
-                     display_line, font=font, fill=defn.shadow_color)
-        draw.text((x, y), display_line, font=font, fill=defn.fg_color[0])
-        y += height + defn.line_spacing
+            draw.text(
+                (x + defn.shadow_offset[0], current_y + defn.shadow_offset[1]),
+                info['text'],
+                font=font,
+                fill=defn.shadow_color
+            )
+        
+        # Draw text
+        draw.text(
+            (x, current_y),
+            info['text'],
+            font=font,
+            fill=defn.fg_color[0]
+        )
+        
+        current_y += info['height'] + defn.line_spacing
 
     buf = io.BytesIO()
     img.save(buf, format="PNG")

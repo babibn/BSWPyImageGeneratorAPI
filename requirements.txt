@@ -2,3 +2,8 @@ fastapi
 Pillow
 uvicorn
 pydantic
+imgkit
+python-multipart
+
+
+#sudo apt-get install wkhtmltopdf
