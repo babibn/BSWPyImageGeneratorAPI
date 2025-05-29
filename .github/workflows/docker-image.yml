@@ -28,7 +28,7 @@ jobs:
       - name: Build Docker image
         run: |
           docker build -t ${DOCKER_USERNAME}/bswpyimagegeneratorapi:latest .
-          docker tag ${DOCKER_USERNAME}/bswpyimagegeneratorapi:latest ${DOCKER_USERNAME}/bswpyimagegeneratorapi:${DATE_TAG}
+          docker tag ${DOCKER_USERNAME}/bswpyimagegeneratorapi:latest ${DOCKER_USERNAME}/bswpyimagegeneratorapi:build${DATE_TAG}
 
       - name: Push Docker image to Hub
         run: |
