@@ -66,10 +66,18 @@ def generate_html(params: dict) -> str:
                 box-sizing: border-box;
             }}
         </style>
+        <script src="jquery.min.js"></script>
+        <script src="js/jQueryEmoji.js"></script>
+        <link href="css/style.css" rel="stylesheet" />
     </head>
     <body>
         <div class="content">{safe_text}</div>
     </body>
+    <script>
+    $(function(){{
+	$("body").Emoji();
+    }});
+</script>
     </html>
     '''
 
@@ -80,15 +88,19 @@ def html_to_image(params: dict) -> bytes:
         'width': params['width'],
         'height': params['height'],
         'enable-local-file-access': None,
+        'quality':100,
         'quiet': ''
     }
-    with tempfile.NamedTemporaryFile(delete=False, suffix='.html') as f:
+    # with tempfile.TemporaryDirectory() as d:
+    #     #os.makedirs(d)
+    with tempfile.NamedTemporaryFile(delete=False,dir="./src/app", suffix='.html') as f:
         f.write(html_content.encode('utf-8'))
         html_path = f.name
-    try:
-        return imgkit.from_file(html_path, False, options=options)
-    finally:
-        os.unlink(html_path)
+        f.file.flush()
+        try:
+            return imgkit.from_file(html_path, False, options=options)
+        finally:
+            os.unlink(html_path)
 
 @app.post("/generate")
 async def generate_image(params: ImageRequest = Body(...)):

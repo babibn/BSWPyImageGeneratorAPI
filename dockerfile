@@ -17,7 +17,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the rest of your application code into the working directory
-COPY src/ImageGenerator_html.py /app/src/ImageGenerator_html.py
+COPY src /app/src
 
 # Expose the port that FastAPI will run on
 EXPOSE 8000
