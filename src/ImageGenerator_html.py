@@ -29,7 +29,7 @@ def generate_html(params: dict) -> str:
     if 'escape_text' not in params:
         params['escape_text'] = True
     if params['escape_text'] == True:
-        safe_text = escape(params['text']).replace('\n', '<br>')
+        safe_text = escape(params['text']).replace('\r\n', '\n').replace('\r', '\n').replace('\n', '<br>')
     else:
      safe_text=params['text']
     return f'''
