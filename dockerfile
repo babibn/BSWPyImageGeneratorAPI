@@ -1,5 +1,5 @@
 # Use the official Python base image with the latest tag
-FROM python:3.13-slim
+FROM python:3.10-slim
 
 # Install sudo for apt-get access
 # RUN apt-get update && apt-get install -y \
