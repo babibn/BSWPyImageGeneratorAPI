@@ -1,11 +1,11 @@
 # Use the official Python base image with the latest tag
 FROM python:3.10-slim
 
-# Install sudo for apt-get access
-# RUN apt-get update && apt-get install -y \
-#     sudo \
-#     wkhtmltopdf \
-#     && rm -rf /var/lib/apt/lists/*
+#Install sudo for apt-get access
+RUN apt-get update && apt-get install -y \
+    sudo \
+    wkhtmltopdf \
+    && rm -rf /var/lib/apt/lists/*
 
 # # Install dependencies
 # RUN apt-get update && \
@@ -16,15 +16,7 @@ FROM python:3.10-slim
 
 
 
-    # Remove any previous wkhtmltopdf install lines, and use:
-RUN apt-get update && \
-    apt-get install -y wget xfonts-75dpi && \
-    wget https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.6/wkhtmltox-0.12.6-1.amd64.tar.xz && \
-    tar -xJf wkhtmltox-0.12.6-1.amd64.tar.xz && \
-    cp wkhtmltox/bin/wkhtmltopdf /usr/local/bin/ && \
-    cp wkhtmltox/bin/wkhtmltoimage /usr/local/bin/ && \
-    chmod +x /usr/local/bin/wkhtmltopdf /usr/local/bin/wkhtmltoimage && \
-    rm -rf wkhtmltox*
+    
 # Set the working directory inside the container
 WORKDIR /app
 
