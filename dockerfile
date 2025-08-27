@@ -1,18 +1,19 @@
 # Use the official Python base image with the latest tag
-FROM python:3.10-slim
+FROM python:3.9.17-slim-buster
 
-#Install sudo for apt-get access
-RUN apt-get update && apt-get install -y \
-    sudo \
-    wkhtmltopdf \
-    && rm -rf /var/lib/apt/lists/*
 
-# # Install dependencies
-# RUN apt-get update && \
-#     apt-get install -y sudo wget && \
-#     wget https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.5/wkhtmltox_0.12.5-1.focal_amd64.deb && \
-#     apt install -y ./wkhtmltox_0.12.5-1.focal_amd64.deb && \
-#     rm -rf /var/lib/apt/lists/* wkhtmltox_0.12.5-1.focal_amd64.deb
+# #Install sudo for apt-get access
+# RUN apt-get update && apt-get install -y \
+#     sudo \
+#     wkhtmltopdf \
+#     && rm -rf /var/lib/apt/lists/*
+
+ # Install dependencies
+RUN apt-get update && \
+    apt-get install -y sudo wget && \
+    wget https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.5/wkhtmltox_0.12.5-1.buster_amd64.deb && \
+    apt install -y ./wkhtmltox_0.12.5-1.buster_amd64.deb && \
+    rm -rf /var/lib/apt/lists/* wkhtmltox_0.12.5-1.buster_amd64.deb
 
 
 
