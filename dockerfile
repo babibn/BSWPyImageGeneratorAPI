@@ -2,10 +2,17 @@
 FROM python:3.13-slim
 
 # Install sudo for apt-get access
-RUN apt-get update && apt-get install -y \
-    sudo \
-    wkhtmltopdf \
-    && rm -rf /var/lib/apt/lists/*
+# RUN apt-get update && apt-get install -y \
+#     sudo \
+#     wkhtmltopdf \
+#     && rm -rf /var/lib/apt/lists/*
+
+# Install dependencies
+RUN apt-get update && \
+    apt-get install -y sudo wget && \
+    wget https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6.1-3/wkhtmltox_0.12.6.1-3.bookworm_amd64.deb && \
+    apt install -y ./wkhtmltox_0.12.6.1-3.bookworm_amd64.deb && \
+    rm -rf /var/lib/apt/lists/* wkhtmltox_0.12.6.1-3.bookworm_amd64.deb
 
 # Set the working directory inside the container
 WORKDIR /app
