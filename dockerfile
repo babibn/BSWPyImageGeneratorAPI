@@ -7,13 +7,24 @@ FROM python:3.10-slim
 #     wkhtmltopdf \
 #     && rm -rf /var/lib/apt/lists/*
 
-# Install dependencies
-RUN apt-get update && \
-    apt-get install -y sudo wget && \
-    wget https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.5/wkhtmltox_0.12.5-1.focal_amd64.deb && \
-    apt install -y ./wkhtmltox_0.12.5-1.focal_amd64.deb && \
-    rm -rf /var/lib/apt/lists/* wkhtmltox_0.12.5-1.focal_amd64.deb
+# # Install dependencies
+# RUN apt-get update && \
+#     apt-get install -y sudo wget && \
+#     wget https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.5/wkhtmltox_0.12.5-1.focal_amd64.deb && \
+#     apt install -y ./wkhtmltox_0.12.5-1.focal_amd64.deb && \
+#     rm -rf /var/lib/apt/lists/* wkhtmltox_0.12.5-1.focal_amd64.deb
 
+
+
+    # Remove any previous wkhtmltopdf install lines, and use:
+RUN apt-get update && \
+    apt-get install -y wget xfonts-75dpi && \
+    wget https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.6/wkhtmltox-0.12.6-1.amd64.tar.xz && \
+    tar -xJf wkhtmltox-0.12.6-1.amd64.tar.xz && \
+    cp wkhtmltox/bin/wkhtmltopdf /usr/local/bin/ && \
+    cp wkhtmltox/bin/wkhtmltoimage /usr/local/bin/ && \
+    chmod +x /usr/local/bin/wkhtmltopdf /usr/local/bin/wkhtmltoimage && \
+    rm -rf wkhtmltox*
 # Set the working directory inside the container
 WORKDIR /app
 
