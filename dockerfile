@@ -8,6 +8,16 @@ FROM python:3.11-slim-buster
 #     wkhtmltopdf \
 #     && rm -rf /var/lib/apt/lists/*
 
+# Replace deb.debian.org URLs with archive.debian.org in sources.list
+# Disable valid-until check and allow insecure archive repository for apt
+RUN sed -i 's|http://deb.debian.org/debian|http://archive.debian.org/debian|g' /etc/apt/sources.list \
+ && sed -i 's|http://deb.debian.org/debian-security|http://archive.debian.org/debian-security|g' /etc/apt/sources.list \
+ && echo 'Acquire::Check-Valid-Until "false";' > /etc/apt/apt.conf.d/99archive \
+ && echo 'Acquire::AllowInsecureRepositories "true";' >> /etc/apt/apt.conf.d/99archive \
+ && apt-get update
+
+
+
  # Install dependencies
 RUN apt-get update && \
     apt-get install -y sudo wget && \
