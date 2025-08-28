@@ -1,7 +1,17 @@
 # Use the official Python base image with the latest tag
-FROM ubuntu/python:3.8-20.04_stable
+FROM ubuntu:20.04 AS python_focal
+
+# Prevent interactive prompts during package installation
+ENV DEBIAN_FRONTEND=noninteractive 
+
+RUN apt-get update && apt-get install -y \
+    python3.8 \
+    python3-pip \
+    bash \
+    && rm -rf /var/lib/apt/lists/*
 
 
+FROM python_focal 
 
 # #Install sudo for apt-get access
 RUN apt-get update && apt-get install -y \
