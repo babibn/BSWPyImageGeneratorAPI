@@ -46,13 +46,14 @@ wget --no-clobber "https://github.com/mrbvrz/segoe-ui/raw/master/font/${VARIANT}
 done && \
 fc-cache -fv
 
+COPY src /app/src
+
 # Create a non-root user to run the application 
 RUN useradd -m worker && \
     chown -R worker:worker /app
 USER worker
 
 # Copy the rest of your application code into the working directory
-COPY src /app/src
 
 # Expose the port that FastAPI will run on
 EXPOSE 8000
