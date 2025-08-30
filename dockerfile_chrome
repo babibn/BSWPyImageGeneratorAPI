@@ -37,6 +37,17 @@ COPY requirements.txt .
 # Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
+
+
+RUN DEST_DIR="/usr/share/fonts/segoeui" && \
+    mkdir -p "$DEST_DIR" && \
+    VARIANTS='segoeui segoeuib segoeuii segoeuiz segoeuil seguili segoeuisl seguisli seguisb seguisbi seguibl seguibli seguiemj seguisym seguihis' && \
+    for VARIANT in $VARIANTS; do \
+      wget --no-clobber "https://github.com/mrbvrz/segoe-ui/raw/master/font/${VARIANT}.ttf" -O "${DEST_DIR}/${VARIANT}.ttf"; \
+    done && \
+    fc-cache -fv
+
+
 # Copy the rest of your application code into the working directory
 COPY src /app/src
 
