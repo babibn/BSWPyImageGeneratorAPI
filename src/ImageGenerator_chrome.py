@@ -7,6 +7,7 @@ import imgkit
 import io
 import tempfile
 import os
+from PIL import Image
 
 app = FastAPI()
 
@@ -113,6 +114,15 @@ def html_to_image(params: dict) -> bytes:
                 f'--screenshot={html_path}.png',
                 html_path
             ])
+            # Open the image
+            im = Image.open(f'{html_path}.png')
+
+            # Get size
+            width, height = im.size
+            # Crop 88 pixels from the bottom
+            cropped = im.crop((0, 0, width, height - 88))
+            # Overwrite the original
+            cropped.save(f'{html_path}.png')
             with open(f'{html_path}.png', 'rb') as img_file:
                 image_data = img_file.read()
             os.unlink(f'{html_path}.png')
