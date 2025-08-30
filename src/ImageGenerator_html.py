@@ -58,7 +58,7 @@ def generate_html(params: dict) -> str:
             .content {{
                 max-width: {params['width'] - 40}px;
                 padding: 20px;
-                white-space: {'pre-wrap' if params['wrap_text'] else 'nowrap'};
+                white-space: {'normal' if params['wrap_text'] else 'nowrap'};
                 font-size: {params['font_size']}px;
                 line-height: {params['line_spacing']}em;
                 text-shadow: {params['text_shadow']};
