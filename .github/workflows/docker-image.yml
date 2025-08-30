@@ -25,15 +25,16 @@ jobs:
         id: set_date_tag
         run: echo "DATE_TAG=$(date +'%Y%m%d')" >> $GITHUB_ENV
 
+      - name: Build Docker image Chrome
+        run: |
+          docker build -f dockerfile_chrome -t ${DOCKER_USERNAME}/bswpyimagegeneratorapi:chrome-latest .
+          docker tag ${DOCKER_USERNAME}/bswpyimagegeneratorapi:chrome-latest ${DOCKER_USERNAME}/bswpyimagegeneratorapi:chrome-build${DATE_TAG}
+
       - name: Build Docker image
         run: |
           docker build -t ${DOCKER_USERNAME}/bswpyimagegeneratorapi:latest .
           docker tag ${DOCKER_USERNAME}/bswpyimagegeneratorapi:latest ${DOCKER_USERNAME}/bswpyimagegeneratorapi:build${DATE_TAG}
 
-      - name: Build Docker image Chrome
-        run: |
-          docker build -f dockerfile_chrome -t ${DOCKER_USERNAME}/bswpyimagegeneratorapi:chrome-latest .
-          docker tag ${DOCKER_USERNAME}/bswpyimagegeneratorapi:chrome-latest ${DOCKER_USERNAME}/bswpyimagegeneratorapi:chrome-build${DATE_TAG}
 
       - name: Push Docker image to Hub
         run: |

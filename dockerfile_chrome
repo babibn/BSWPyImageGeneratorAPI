@@ -5,8 +5,8 @@ FROM python:3.13-slim
 RUN apt-get update && apt-get install -y \
     sudo  wget \
     && wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb \
-    && sudo apt install ./google-chrome-stable_current_amd64.deb \
-    && rm -rf /var/lib/apt/lists/*
+    && sudo apt install -y  ./google-chrome-stable_current_amd64.deb \
+    && rm -rf /var/lib/apt/lists/*  ./google-chrome-stable_current_amd64.deb
 
 # # Replace deb.debian.org URLs with archive.debian.org in sources.list
 # # Disable valid-until check and allow insecure archive repository for apt
